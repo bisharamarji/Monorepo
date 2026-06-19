@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'github_task/src/**'
+      # Corrected path
+      - 'src/**'
       - '.github/workflows/ci.cd.yml'
   push:
     branches:
@@ -28,9 +29,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          # Corrected path
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Install Dependencies
+        # Corrected path
+        working-directory: src/backend
+        run: npm ci
 
       - name: Run Backend Tests
-        working-directory: github_task/src/backend
+        # Corrected path
+        working-directory: src/backend
         run: npm test
 
   sonarqube_analysis:
@@ -48,7 +58,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          projectBaseDir: github_task
+          # Corrected path (points to the root of the repo)
+          projectBaseDir: .
 
   simulate_deployment:
     name: Simulate Production Deployment
