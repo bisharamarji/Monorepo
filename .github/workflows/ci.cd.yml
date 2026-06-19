@@ -5,7 +5,6 @@ on:
     branches:
       - main
     paths:
-      # Corrected path
       - 'src/**'
       - '.github/workflows/ci.cd.yml'
   push:
@@ -30,16 +29,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          # Corrected path
           cache-dependency-path: 'package-lock.json'
 
       - name: Install Dependencies
-        # Corrected path
         working-directory: src/backend
         run: npm ci
 
       - name: Run Backend Tests
-        # Corrected path
         working-directory: src/backend
         run: npm test
 
@@ -58,8 +54,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          # Corrected path (points to the root of the repo)
           projectBaseDir: .
+          # This tells SonarQube exactly what to name your project
+          args: >
+            -Dsonar.projectKey=monorepo_github_task
 
   simulate_deployment:
     name: Simulate Production Deployment
